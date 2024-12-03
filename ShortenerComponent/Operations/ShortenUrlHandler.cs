@@ -7,21 +7,19 @@ public class ShortenUrlHandler(ApplicationDbContext context, ShortenerServiceOpt
 {
     public async Task<Url> Handle(ShortenUrlCommand request, CancellationToken cancellationToken)
     {
-
-        var hash = await GenerateHash();
-        if (!await context.Urls.AnyAsync(u => u.OriginalUrl == request.OriginalUrl, cancellationToken: cancellationToken))
+        if (await context.Urls.AnyAsync(u => u.OriginalUrl == request.OriginalUrl, cancellationToken))
         {
             throw new UrlAlreadyExistsException(request.OriginalUrl);
         }
+        var hash = await GenerateHash();
+
         var url = new Url(
             request.OriginalUrl,
             hash,
-            new UrlInfo(
-                new UrlExpiration(options.DefaultExpirationTime),
-                UrlVisits.Empty,
-                request.UserId,
-                UrlCreationTime.Now
-            )
+            new UrlExpiration(DateTime.Now + options.DefaultExpirationTime),
+            UrlVisits.Empty,
+            request.UserId,
+            UrlCreationTime.Now
         );
 
         context.Add(url);

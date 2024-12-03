@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35507.96 d17.13
+VisualStudioVersion = 17.13.35507.96
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{1F7D5710-B841-4359-9456-12F1701F54B6}"
 EndProject
@@ -10,6 +10,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "Database\Database.csproj", "{7CF1303F-15F7-4501-933A-73A4F4440233}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{61A54B5E-B429-4ECF-BDF2-73EA59DAFE78}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserComponent", "UserComponent\UserComponent.csproj", "{EC98C33E-5B8A-49C8-9FC1-3340242B5293}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{81DDED9D-158B-E303-5F62-77A2896D2A5A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{A8500EEC-6F19-4E7F-AEEE-29983A5272D3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +39,18 @@ Global
 		{61A54B5E-B429-4ECF-BDF2-73EA59DAFE78}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61A54B5E-B429-4ECF-BDF2-73EA59DAFE78}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61A54B5E-B429-4ECF-BDF2-73EA59DAFE78}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC98C33E-5B8A-49C8-9FC1-3340242B5293}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC98C33E-5B8A-49C8-9FC1-3340242B5293}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC98C33E-5B8A-49C8-9FC1-3340242B5293}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC98C33E-5B8A-49C8-9FC1-3340242B5293}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8500EEC-6F19-4E7F-AEEE-29983A5272D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8500EEC-6F19-4E7F-AEEE-29983A5272D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8500EEC-6F19-4E7F-AEEE-29983A5272D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8500EEC-6F19-4E7F-AEEE-29983A5272D3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -13,6 +13,5 @@ public class GetUrlHandler(ApplicationDbContext context)
             throw new UrlNotFoundException(request.UrlHash);
         }
         return url;
-
     }
 }

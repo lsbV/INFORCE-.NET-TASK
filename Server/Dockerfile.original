@@ -13,10 +13,6 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Server/Server.csproj", "Server/"]
-COPY ["ShortenerComponent/ShortenerComponent.csproj", "ShortenerComponent/"]
-COPY ["Core/Core.csproj", "Core/"]
-COPY ["Database/Database.csproj", "Database/"]
-COPY ["UserComponent/UserComponent.csproj", "UserComponent/"]
 RUN dotnet restore "./Server/Server.csproj"
 COPY . .
 WORKDIR "/src/Server"

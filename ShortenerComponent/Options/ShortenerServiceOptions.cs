@@ -1,8 +1,9 @@
 ﻿namespace ShortenerComponent.Options;
 
-public record ShortenerServiceOptions(
-    DateTime DefaultExpirationTime,
-    char[] AllowedCharacters,
-    int HashLength,
-    int MaxAttempts
-);
+public class ShortenerServiceOptions
+{
+    public int HashLength { get; set; }
+    public int MaxAttempts { get; set; }
+    public string AllowedCharacters { get; set; }
+    public TimeSpan DefaultExpirationTime { get; set; }
+}

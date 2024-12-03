@@ -3,11 +3,14 @@
 public record Url(
     OriginalUrl OriginalUrl,
     UrlHash Hash,
-    UrlInfo Info
+    UrlExpiration Expiration,
+    UrlVisits Visits,
+    UserId CreatedBy,
+    UrlCreationTime CreatedAt
     );
 
 
-public record OriginalUrl(Uri Value);
+public record OriginalUrl(string Value);
 
 
 public record UrlHash(string Value);

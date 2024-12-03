@@ -4,7 +4,7 @@
 [ApiController]
 public class ShortenerController(ISender sender) : ControllerBase
 {
-    [HttpGet]
+    [HttpGet("{url}")]
     public async Task<IActionResult> Get(string url)
     {
         var result = await sender.Send(new GetUrlRequest(new UrlHash(url)));
@@ -14,7 +14,7 @@ public class ShortenerController(ISender sender) : ControllerBase
 
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> Post(Uri url)
+    public async Task<IActionResult> Post(string url)
     {
         if (!int.TryParse(User.Identity?.Name, out var userId))
         {
@@ -52,8 +52,8 @@ internal static class Extensions
     public static UrlDto ToDto(this Url url) => new(
         url.OriginalUrl.Value.ToString(),
         url.Hash.Value,
-        url.Info.Expiration.Value,
-        url.Info.Visits.Value,
-        url.Info.CreatedBy.Value,
-        url.Info.CreatedAt.Value);
+        url.Expiration.Value,
+        url.Visits.Value,
+        url.CreatedBy.Value,
+        url.CreatedAt.Value);
 }

@@ -12,7 +12,7 @@ public class DeleteUrlHandler(ApplicationDbContext context)
         {
             throw new UrlNotFoundException(request.UrlHash);
         }
-        if (url.Info.CreatedBy != request.UserId)
+        if (url.CreatedBy != request.UserId)
         {
             throw new ForbiddenOperationException(request.UserId, url.Hash.Value);
         }
