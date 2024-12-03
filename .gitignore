@@ -13,6 +13,8 @@
 # webstorm
 .idea/
 
+# vscode
+.vscode/
 
 
 
