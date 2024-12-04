@@ -1,11 +1,12 @@
-﻿using ShortenerComponent.Options;
+﻿using Microsoft.Extensions.Options;
+using ShortenerComponent.Options;
 
 namespace Tests.ShortenerComponent;
 
 public class ShortenUrlHandlerTests
 {
     private readonly ApplicationDbContext _context = TestHelper.GetDbContext();
-    private readonly ShortenerServiceOptions _options = TestHelper.GetShortenerServiceOptions();
+    private readonly IOptions<ShortenerServiceOptions> _options = Options.Create(TestHelper.GetShortenerServiceOptions());
 
 
 
@@ -17,7 +18,7 @@ public class ShortenUrlHandlerTests
         var result = await handler.Handle(command, CancellationToken.None);
 
         Assert.NotNull(result);
-        Assert.Equal(_options.HashLength, result.Hash.Value.Length);
+        Assert.Equal(_options.Value.HashLength, result.Hash.Value.Length);
     }
 
     [Fact]
@@ -28,7 +29,7 @@ public class ShortenUrlHandlerTests
         var url = new Url(
             duplicatedUrl,
             new UrlHash("TEST34"),
-            new UrlExpiration(DateTime.Now + _options.DefaultExpirationTime),
+            new UrlExpiration(DateTime.Now + _options.Value.DefaultExpirationTime),
             new UrlVisits(2),
             new UserId(1),
             new UrlCreationTime(DateTime.Now));
@@ -47,20 +48,20 @@ public class ShortenUrlHandlerTests
         _context.Urls.Add(new Url(
             TestHelper.GetRandomUrl(),
             new UrlHash("1"),
-            new UrlExpiration(DateTime.Now + _options.DefaultExpirationTime),
+            new UrlExpiration(DateTime.Now + _options.Value.DefaultExpirationTime),
             new UrlVisits(2),
             new UserId(1),
             new UrlCreationTime(DateTime.Now)));
         await _context.SaveChangesAsync();
 
         var command = new ShortenUrlCommand(TestHelper.GetRandomUrl(), new UserId(1));
-        var handler = new ShortenUrlHandler(_context, new ShortenerServiceOptions
+        var handler = new ShortenUrlHandler(_context, Options.Create(new ShortenerServiceOptions
         {
             HashLength = 1,
             MaxAttempts = 1,
             AllowedCharacters = "1",
             DefaultExpirationTime = TimeSpan.FromDays(1)
-        });
+        }));
 
         await Assert.ThrowsAsync<TooMuchAttemptsException>(() => handler.Handle(command, CancellationToken.None));
     }

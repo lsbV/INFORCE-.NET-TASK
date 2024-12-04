@@ -1,0 +1,55 @@
+.url-table-container {
+  margin: 20px;
+  padding: 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  background-color: #ffffff;
+}
+
+.url-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.url-table-header {
+  background-color: #f8f9fa;
+}
+
+.url-table-row:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.url-table-cell {
+  padding: 10px;
+  border: 1px solid #e0e0e0;
+}
+
+.url-table-actions {
+  text-align: center;
+}
+
+.url-table-button {
+  margin: 0 5px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.url-table-button.details-button {
+  background-color: #007bff;
+  color: white;
+}
+
+.url-table-button.details-button:hover {
+  background-color: #0056b3;
+}
+
+.url-table-button.delete-button {
+  background-color: #dc3545;
+  color: white;
+}
+
+.url-table-button.delete-button:hover {
+  background-color: #c82333;
+}

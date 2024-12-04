@@ -5,11 +5,13 @@ services:
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
       - ConnectionStrings__Database=Server=shortenerdb;Database=ShortenerDb;User Id=sa;Password=Password123;Encrypt=False;MultipleActiveResultSets=True;TrustServerCertificate=True
+      - ConnectionStrings__Redis=distributedcache:6379
       - Jwt__Key=supersecretkey123456789012345678
       - ShortenerServiceOptions__HashLength=6
       - ShortenerServiceOptions__MaxAttempts=5
       - ShortenerServiceOptions__AllowedCharacters=ABCDEFGHJKMNPQRSTUVWXYZ23456789
       - ShortenerServiceOptions__DefaultExpirationTime=7.00:00:00
+      - ConcatBaseUrlBehaviorOptions__BaseUrl=http://localhost:8080/go/
     ports:
       - "8080:8080"
       - "8081:8081"
@@ -18,6 +20,17 @@ services:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+  
+  # angularapp:
+  #   ports: 
+  #     - "80:80"
+  #   environment:
+  #     NODE_ENV: production
+  distributedcache:
+    container_name: distributedcache
+    image: redis
+    ports:
+      - "6379:6379"
   
   shortenerdb:
     container_name: shortenerdb
@@ -29,3 +42,5 @@ services:
       - "1433:1433"
     volumes:
       - shortenerdb-data:/var/opt/mssql
+
+  

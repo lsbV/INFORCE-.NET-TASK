@@ -1,0 +1,9 @@
+<div class="details">
+  <h3>URL Info</h3>
+  <p>Original URL: <a href="{{ entireUrlInfo?.originalUrl }}" target="_blank">{{ entireUrlInfo?.originalUrl }}</a> </p>
+  <p>Shortened URL: <a href="{{ entireUrlInfo?.shortenedUrl }}" target="_blank">{{ entireUrlInfo?.shortenedUrl }}</a></p>
+  <p>Created at: {{ entireUrlInfo?.createdAt | date }}</p>
+  <p>Expires at: {{ entireUrlInfo?.expiration | date }}</p>
+  <p>Visits: {{ entireUrlInfo?.visits }}</p>
+  <p>Created by: {{ entireUrlInfo?.createdBy }}</p>
+</div>

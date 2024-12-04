@@ -16,12 +16,18 @@ public record OriginalUrl(string Value);
 public record UrlHash(string Value);
 
 
-public record UrlExpiration(DateTime Value);
+public record UrlExpiration(DateTime Value)
+{
+    public static bool operator >(UrlExpiration left, DateTime right) => left.Value > right;
+    public static bool operator <(UrlExpiration left, DateTime right) => left.Value < right;
+}
 
 
 public record UrlVisits(uint Value)
 {
     public static UrlVisits Empty => new(0);
+
+    public static UrlVisits Increment(UrlVisits visits) => new(visits.Value + 1);
 }
 
 

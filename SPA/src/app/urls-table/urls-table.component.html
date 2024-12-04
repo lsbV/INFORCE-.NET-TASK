@@ -1,0 +1,41 @@
+<div class="url-table-container">
+  <button class="reload-button url-table-button" (click)="reload()">Reload</button>
+  <table class="url-table">
+    <thead>
+    <tr class="url-table-header">
+      <td >
+        Original
+      </td>
+      <td >
+        Shortened
+      </td>
+      @if (showActionButtons) {
+        <td >
+          Actions
+        </td>
+      }
+    </tr>
+    </thead>
+    <tbody>
+      @for (url of urls; track url.shortenedUrl) {
+        <tr class="url-table-row">
+          <td class="url-table-cell">
+            {{ url.originalUrl }}
+          </td>
+          <td class="url-table-cell">
+            <a href="{{ url.shortenedUrl }}" target="_blank">{{ url.shortenedUrl }}</a>
+          </td>
+
+          @if (showActionButtons) {
+
+            <td class="url-table-cell url-table-actions">
+              <button class="details-button url-table-button" (click)="showDetails(url.shortenedUrl)">Details</button>
+              <button class="delete-button url-table-button" (click)="deleteUrl(url.shortenedUrl)">Delete</button>
+            </td>
+          }
+        </tr>
+      }
+    </tbody>
+  </table>
+
+</div>

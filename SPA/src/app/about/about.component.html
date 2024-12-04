@@ -1,0 +1,17 @@
+<div class="about">
+  <p
+    [ngStyle]="{'display':editMode?'none':'block'}">
+    {{about}}
+  </p>
+  @if (userService.isAdmin()){
+
+    <button (click)="edit()" [ngStyle]="{'display':editMode?'none':'block'}">Edit</button>
+    <div [ngStyle]="{'display':editMode?'block':'none'}">
+      <textarea [(ngModel)]="about" ></textarea>
+      <button (click)="save()">Save</button>
+      <button (click)="cancel()">Cancel</button>
+    </div>
+  }
+</div>
+
+

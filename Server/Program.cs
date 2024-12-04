@@ -2,25 +2,39 @@ using System.Security.Claims;
 using System.Text;
 using Database;
 using FluentValidation;
+using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Server.Behavior;
 using ShortenerComponent.Options;
 using UserComponent;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
-//builder.Services.Configure<ShortenerServiceOptions>(builder.Configuration.GetSection("ShortenerServiceOptions"));
-builder.Services.AddSingleton(new ShortenerServiceOptions()
-{
-    AllowedCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
-    DefaultExpirationTime = TimeSpan.FromDays(7),
-    HashLength = 6,
-    MaxAttempts = 5
-});
+builder.Services.Configure<ShortenerServiceOptions>(builder.Configuration.GetSection("ShortenerServiceOptions"));
+builder.Services.Configure<ConcatBaseUrlBehaviorOptions>(builder.Configuration.GetSection("ConcatBaseUrlBehaviorOptions"));
+
 
 builder.Services.AddMediatR(configuration =>
 {
     configuration.RegisterServicesFromAssembly(typeof(ShortenUrlCommand).Assembly);
+});
+builder.Services.AddScoped(typeof(IPipelineBehavior<VisitRequest, Url>), typeof(DistributedCacheBehavior));
+builder.Services.AddScoped(typeof(IPipelineBehavior<GetUrlRequest, Url>), typeof(ConcatBaseUrlBehavior));
+builder.Services.AddScoped(typeof(IPipelineBehavior<GetUrlRequest, Url>), typeof(DistributedCacheBehavior));
+builder.Services.AddScoped(typeof(IPipelineBehavior<GetUrlsRequest, List<Url>>), typeof(ConcatBaseUrlBehavior));
+builder.Services.AddScoped(typeof(IPipelineBehavior<GetUrlRequest, Url>), typeof(CheckAuthorityBehavior));
+builder.Services.AddScoped(typeof(IPipelineBehavior<DeleteUrlCommand, Url>), typeof(CheckAuthorityBehavior));
+builder.Services.AddScoped(typeof(IPipelineBehavior<GetUrlRequest, Url>), typeof(AddCreatorEmailBehavior));
+
+
+
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
 });
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -40,8 +54,9 @@ builder.Services.AddIdentity<User, Role>(options =>
 
 builder.Services.AddControllers();
 
+
 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!));
-var credentials = new SigningCredentials(key, SecurityAlgorithms.Sha256);
+var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 builder.Services.AddAuthentication(
     options =>
     {
@@ -55,8 +70,8 @@ builder.Services.AddAuthentication(
         {
             ValidateIssuer = false,
             ValidateAudience = false,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
+            ValidateLifetime = false,
+            ValidateIssuerSigningKey = false,
             IssuerSigningKey = key,
             RoleClaimType = ClaimTypes.Role
         };
@@ -67,15 +82,38 @@ builder.Services.AddSingleton<ITokenService>(new TokenService(credentials));
 
 builder.Services.AddAuthorization();
 builder.Services.AddValidatorsFromAssemblies([typeof(Program).Assembly, typeof(LoginRequestValidator).Assembly]);
+builder.Services.AddFluentValidationAutoValidation();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(corsPolicyBuilder =>
+    {
+        corsPolicyBuilder.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
+
 
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+
+app.UseCors();
+
+
 using var scope = app.Services.CreateScope();
 var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-await dbContext.Database.MigrateAsync();
+if (!await dbContext.Database.CanConnectAsync())
+{
+    await dbContext.Database.MigrateAsync();
+}
 
 
 app.UseSwagger();

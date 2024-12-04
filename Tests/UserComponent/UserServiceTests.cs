@@ -14,7 +14,7 @@ public class UserServiceTests
         _userManagerMock = new Mock<UserManager<User>>(
             Mock.Of<IUserStore<User>>(), null!, null!, null!, null!, null!, null!, null!, null!); // UserManager constructor has 9 parameters
         _tokenServiceMock = new Mock<ITokenService>();
-        _userService = new UserService(_userManagerMock.Object, _tokenServiceMock.Object);
+        _userService = new UserService(_userManagerMock.Object, null!, _tokenServiceMock.Object);
     }
 
     [Fact]
@@ -40,8 +40,8 @@ public class UserServiceTests
     public async Task AuthenticateUserAsync_ShouldReturnToken_WhenCredentialsAreValid()
     {
         // Arrange
-        var loginRequest = new LoginRequest { Email = "test@example.com", Password = "Password123!" };
-        var user = new User { UserName = loginRequest.Email, Email = loginRequest.Email };
+        var loginRequest = new LoginRequest { Email = "user@email.com", Password = "password", };
+        var user = new User { UserName = loginRequest.Email, Email = loginRequest.Email, Id = new UserId(2) };
         var roles = new List<string> { "User" };
         _userManagerMock.Setup(um => um.FindByEmailAsync(loginRequest.Email))
             .ReturnsAsync(user);
@@ -53,11 +53,11 @@ public class UserServiceTests
             .Returns("mocked_token");
 
         // Act
-        var token = await _userService.AuthenticateUserAsync(loginRequest);
+        var result = await _userService.AuthenticateUserAsync(loginRequest);
 
         // Assert
-        Assert.NotNull(token);
-        Assert.Equal("mocked_token", token);
+        Assert.NotNull(result);
+        Assert.Equal("mocked_token", result.Token);
         _userManagerMock.Verify(um => um.FindByEmailAsync(loginRequest.Email), Times.Once);
         _userManagerMock.Verify(um => um.CheckPasswordAsync(user, loginRequest.Password), Times.Once);
         _userManagerMock.Verify(um => um.GetRolesAsync(user), Times.Once);

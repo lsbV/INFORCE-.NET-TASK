@@ -1,12 +1,24 @@
 services:
   server:
     image: ${DOCKER_REGISTRY-}server
+    depends_on:
+      - shortenerdb
     build:
       context: .
       dockerfile: Server/Dockerfile
 
   shortenerdb:
     image: mcr.microsoft.com/mssql/server
+
+  # angularapp:
+  #   depends_on:
+  #     - server
+  #   build:
+  #     context: .
+  #     dockerfile: SPA/Dockerfile
+     
+  distributedcache:
+    image: redis
 
 volumes:
     shortenerdb-data:

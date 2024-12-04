@@ -1,0 +1,17 @@
+.home {
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  background-color: #ffffff;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.home h3 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.home app-urls-table {
+  width: 100%;
+}

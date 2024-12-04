@@ -1,6 +1,6 @@
 ﻿namespace ShortenerComponent.Operations;
 
-public record GetUrlRequest(UrlHash UrlHash) : IRequest<Url>;
+public record GetUrlRequest(UrlHash UrlHash, UserId Requester) : IRequest<Url>;
 
 public class GetUrlHandler(ApplicationDbContext context)
     : IRequestHandler<GetUrlRequest, Url>

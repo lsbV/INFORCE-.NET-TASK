@@ -12,10 +12,6 @@ public class DeleteUrlHandler(ApplicationDbContext context)
         {
             throw new UrlNotFoundException(request.UrlHash);
         }
-        if (url.CreatedBy != request.UserId)
-        {
-            throw new ForbiddenOperationException(request.UserId, url.Hash.Value);
-        }
         context.Remove(url);
         await context.SaveChangesAsync(cancellationToken);
         return url;

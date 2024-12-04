@@ -47,6 +47,20 @@ namespace Database.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "User",
+                            NormalizedName = "USER"
+                        });
                 });
 
             modelBuilder.Entity("Core.Url", b =>
@@ -65,7 +79,7 @@ namespace Database.Migrations
 
                     b.Property<string>("OriginalUrl")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<long>("Visits")
                         .HasColumnType("bigint");
@@ -74,13 +88,75 @@ namespace Database.Migrations
 
                     b.HasIndex("CreatedBy");
 
+                    b.HasIndex("OriginalUrl")
+                        .IsUnique();
+
                     b.ToTable("Urls");
+
+                    b.HasData(
+                        new
+                        {
+                            Hash = "ASDFGH",
+                            CreatedAt = new DateTime(2024, 12, 3, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = 1,
+                            Expiration = new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Utc),
+                            OriginalUrl = "https://www.google.com",
+                            Visits = 3462L
+                        },
+                        new
+                        {
+                            Hash = "QWERTY",
+                            CreatedAt = new DateTime(2024, 12, 2, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = 2,
+                            Expiration = new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Utc),
+                            OriginalUrl = "https://www.bing.com",
+                            Visits = 11116L
+                        },
+                        new
+                        {
+                            Hash = "ZXCV8N",
+                            CreatedAt = new DateTime(2024, 12, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = 1,
+                            Expiration = new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Utc),
+                            OriginalUrl = "https://www.yahoo.com",
+                            Visits = 33L
+                        },
+                        new
+                        {
+                            Hash = "PK66YT",
+                            CreatedAt = new DateTime(2024, 12, 2, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = 2,
+                            Expiration = new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Utc),
+                            OriginalUrl = "https://www.duckduckgo.com",
+                            Visits = 99L
+                        },
+                        new
+                        {
+                            Hash = "994RTY",
+                            CreatedAt = new DateTime(2024, 11, 29, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = 1,
+                            Expiration = new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Utc),
+                            OriginalUrl = "https://www.youtube.com",
+                            Visits = 600L
+                        },
+                        new
+                        {
+                            Hash = "Z22V8N",
+                            CreatedAt = new DateTime(2024, 11, 28, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = 2,
+                            Expiration = new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Utc),
+                            OriginalUrl = "https://www.twitch.tv",
+                            Visits = 7L
+                        });
                 });
 
             modelBuilder.Entity("Core.User", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -90,6 +166,7 @@ namespace Database.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
@@ -126,6 +203,7 @@ namespace Database.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
@@ -140,6 +218,38 @@ namespace Database.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "f9cc2eea-807c-4b16-9148-ea4d89271064",
+                            Email = "admin@email.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@EMAIL.COM",
+                            NormalizedUserName = "ADMIN",
+                            PasswordHash = "AQAAAAIAAYagAAAAEPhL1BeLwSPmG5wdbQANirheBdXIWcowX5AcraI2Ze9IfaH9dFseZvkSzfuzlwoTJg==",
+                            PhoneNumberConfirmed = false,
+                            TwoFactorEnabled = false,
+                            UserName = "admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "07e37c7d-4882-4d1a-a23c-d10f86c7a46e",
+                            Email = "user@email.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "USER@EMAIL.COM",
+                            NormalizedUserName = "USER",
+                            PasswordHash = "AQAAAAIAAYagAAAAEFlXKDB1j50Xqk3HmERBI83lHYjdxI4ML8MsIG5mFDc0AWeGl4+7mvHQ2DIZTF4inA==",
+                            PhoneNumberConfirmed = false,
+                            TwoFactorEnabled = false,
+                            UserName = "user"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<Core.UserId>", b =>
@@ -224,6 +334,18 @@ namespace Database.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = 1,
+                            RoleId = 1
+                        },
+                        new
+                        {
+                            UserId = 2,
+                            RoleId = 2
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<Core.UserId>", b =>

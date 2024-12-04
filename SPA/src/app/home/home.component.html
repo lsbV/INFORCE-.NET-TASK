@@ -1,0 +1,4 @@
+<div class="home">
+  <h3>URLs</h3>
+  <app-urls-table [urls]="urls" (reloadUrls)="getUrls()" [showActionButtons]="userService.isAdmin()"></app-urls-table>
+</div>

@@ -25,7 +25,7 @@ public class GetUrlHandlerTests
         );
         _mockContext.Setup(c => c.Urls.FindAsync(new object[] { urlHash }, CancellationToken.None))
             .ReturnsAsync(url);
-        var request = new GetUrlRequest(urlHash);
+        var request = new GetUrlRequest(urlHash, new UserId(1));
 
 
         var result = await _handler.Handle(request, CancellationToken.None);
@@ -42,7 +42,7 @@ public class GetUrlHandlerTests
         var urlHash = new UrlHash("nonExistentHash");
         _mockContext.Setup(c => c.Urls.FindAsync(new object[] { urlHash }, CancellationToken.None))
             .ReturnsAsync((Url)null!);
-        var request = new GetUrlRequest(urlHash);
+        var request = new GetUrlRequest(urlHash, new UserId(1));
 
 
         await Assert.ThrowsAsync<UrlNotFoundException>(() => _handler.Handle(request, CancellationToken.None));

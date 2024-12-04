@@ -9,8 +9,6 @@ public class UserController(IUserService userService) : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterRequest model)
     {
-        if (!ModelState.IsValid) return BadRequest(ModelState);
-
         var result = await userService.RegisterUserAsync(model);
         if (!result.Succeeded) return BadRequest(result.Errors);
 
@@ -20,11 +18,10 @@ public class UserController(IUserService userService) : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest model)
     {
-        if (!ModelState.IsValid) return BadRequest(ModelState);
+        var result = await userService.AuthenticateUserAsync(model);
+        if (result is null) return Unauthorized();
 
-        var token = await userService.AuthenticateUserAsync(model);
-        if (token == null) return BadRequest("Invalid email or password");
-
-        return Ok(new { token });
+        return Ok(result);
     }
+
 }
