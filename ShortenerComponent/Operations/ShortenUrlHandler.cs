@@ -14,7 +14,7 @@ public class ShortenUrlHandler(ApplicationDbContext context, IOptions<ShortenerS
         {
             throw new UrlAlreadyExistsException(request.OriginalUrl);
         }
-        var hash = await GenerateHash();
+        var hash = await GenerateHash(cancellationToken);
 
         var url = new Url(
             request.OriginalUrl,
@@ -32,13 +32,13 @@ public class ShortenUrlHandler(ApplicationDbContext context, IOptions<ShortenerS
 
 
 
-    private async Task<UrlHash> GenerateHash()
+    private async Task<UrlHash> GenerateHash(CancellationToken cancellationToken)
     {
         var attempts = 0;
         while (attempts < _options.MaxAttempts)
         {
             var hash = GenerateRandomHash();
-            if (!await context.Urls.AnyAsync(u => u.Hash == hash))
+            if (!await context.Urls.AnyAsync(u => u.Hash == hash, cancellationToken))
             {
                 return hash;
             }
